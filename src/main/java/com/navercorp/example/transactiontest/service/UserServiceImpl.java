@@ -1,7 +1,8 @@
 package com.navercorp.example.transactiontest.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.navercorp.example.transactiontest.dao.UserDao;
 import com.navercorp.example.transactiontest.dto.User;
@@ -20,6 +21,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public User selectUser(int id) {
+		return userDao.selectUser(id);
+	}
+
+	@Override
+	public List<User> selectAllUsers() {
+		return userDao.selectAllUsers();
+	}
+
+	@Override
 	public User insertUser(String name, String email) {
 		User user = new User();
 		user.setName(name);
@@ -28,5 +39,10 @@ public class UserServiceImpl implements UserService {
 		userDao.insertUser(user);
 
 		return user;
+	}
+
+	@Override
+	public int updateUser(int id, String name, String email) {
+		return updateUser(id, name, email);
 	}
 }

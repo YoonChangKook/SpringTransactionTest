@@ -18,10 +18,13 @@ import com.navercorp.example.transactiontest.config.DatabaseConfig;
 import com.navercorp.example.transactiontest.dao.UserDao;
 import com.navercorp.example.transactiontest.dto.User;
 
+/**
+ * Transactional 애노테이션이 붙은 메서드를 내부에서 호출했을 때 제대로 호출되는지 테스트
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {AppConfig.class, DatabaseConfig.class})
-public class UserServiceProxyTest {
-	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceProxyTest.class);
+public class TransactionalProxyTest {
+	private static final Logger LOGGER = LoggerFactory.getLogger(TransactionalProxyTest.class);
 
 	/**
 	 * Transactional을 테스트할 프록시 객체를 주입받는다.

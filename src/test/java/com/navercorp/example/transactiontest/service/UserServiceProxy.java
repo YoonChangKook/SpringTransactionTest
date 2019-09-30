@@ -1,5 +1,7 @@
 package com.navercorp.example.transactiontest.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,16 @@ public class UserServiceProxy implements UserService {
 
 	public UserServiceProxy(@Qualifier("userService") UserService userService) {
 		this.userService = userService;
+	}
+
+	@Override
+	public User selectUser(int id) {
+		return userService.selectUser(id);
+	}
+
+	@Override
+	public List<User> selectAllUsers() {
+		return userService.selectAllUsers();
 	}
 
 	/**
@@ -43,5 +55,10 @@ public class UserServiceProxy implements UserService {
 		this.userService.insertUser(name, email);
 
 		throw new RuntimeException("Test Exception");
+	}
+
+	@Override
+	public int updateUser(int id, String name, String email) {
+		return userService.updateUser(id, name, email);
 	}
 }

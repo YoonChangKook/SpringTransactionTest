@@ -30,4 +30,13 @@
 			#{email}
 		)
 	</insert>
+
+	<update id="updateUser">
+		UPDATE users
+		SET
+			name=#{name},
+			email=#{email}
+		WHERE
+			id=#{id}
+	</update>
 </mapper>

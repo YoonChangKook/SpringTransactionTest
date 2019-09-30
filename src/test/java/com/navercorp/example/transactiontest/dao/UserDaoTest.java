@@ -19,9 +19,25 @@ import com.navercorp.example.transactiontest.dto.User;
 @ContextConfiguration(classes = {DatabaseConfig.class})
 public class UserDaoTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserDaoTest.class);
+	private static final int SELECT_TEST_ID = 1;
+	private static final String SELECT_TEST_NAME = "test-user1";
+	private static final String SELECT_TEST_EMAIL = "test-email1@navercorp.com";
+	private static final int UPDATE_TEST_ID = 2;
+	private static final String UPDATE_TEST_NAME = "update-test-user";
+	private static final String UPDATE_TEST_EMAIL = "update-test-email@navercorp.com";
 
 	@Autowired
 	private UserDao userDao;
+
+	@Test
+	public void selectUserTest() {
+		User user = userDao.selectUser(SELECT_TEST_ID);
+
+		LOGGER.debug("id: {}, name: {}, email: {}", user.getId(), user.getName(), user.getEmail());
+		assertEquals(user.getId(), SELECT_TEST_ID);
+		assertEquals(user.getName(), SELECT_TEST_NAME);
+		assertEquals(user.getEmail(), SELECT_TEST_EMAIL);
+	}
 
 	@Test
 	public void selectAllUsersTest() {
@@ -34,7 +50,6 @@ public class UserDaoTest {
 	@Test
 	public void insertAndSelectTest() {
 		User newUser = new User();
-		newUser.setId(4);
 		newUser.setName("test-user4");
 		newUser.setEmail("test-email4@navercorp.com");
 
@@ -47,5 +62,16 @@ public class UserDaoTest {
 		assertEquals(newUser.getId(), selectUser.getId());
 		assertEquals(newUser.getName(), selectUser.getName());
 		assertEquals(newUser.getEmail(), selectUser.getEmail());
+	}
+
+	@Test
+	public void updateAndSelectTest() {
+		userDao.updateUser(UPDATE_TEST_ID, UPDATE_TEST_NAME, UPDATE_TEST_EMAIL);
+
+		User selectUser = userDao.selectUser(UPDATE_TEST_ID);
+
+		LOGGER.debug(selectUser.toString());
+		assertEquals(UPDATE_TEST_NAME, selectUser.getName());
+		assertEquals(UPDATE_TEST_EMAIL, selectUser.getEmail());
 	}
 }
