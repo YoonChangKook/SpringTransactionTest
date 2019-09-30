@@ -1,5 +1,6 @@
 package com.navercorp.example.transactiontest.service;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +15,7 @@ import com.navercorp.example.transactiontest.dto.User;
 public class TransactionalProxyTestService {
 	private final UserService userService;
 
-	public TransactionalProxyTestService(UserService userService) {
+	public TransactionalProxyTestService(@Qualifier("userService") UserService userService) {
 		this.userService = userService;
 	}
 
