@@ -43,6 +43,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int updateUser(int id, String name, String email) {
-		return updateUser(id, name, email);
+		return userDao.updateUser(id, name, email);
 	}
 }
