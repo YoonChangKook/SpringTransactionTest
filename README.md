@@ -1,7 +1,7 @@
 # Spring Transaction Test
 * JDK 1.8
 * Spring 5.1.4
-* H2 Database 1.4.197
+* MariaDB4j 2.3.0
 * Mybatis 3.5.0
 * Maven 3
 
