@@ -30,9 +30,6 @@ public class TransactionalProxyTest {
 	private static final String INSERT_TEST_NAME = "insert-test-user";
 	private static final String INSERT_TEST_EMAIL = "insert-test-user@navercorp.com";
 
-	/**
-	 * Transactional을 테스트할 프록시 객체를 주입받는다.
-	 */
 	@Autowired
 	private TransactionalProxyTestService transactionalProxyTestService;
 

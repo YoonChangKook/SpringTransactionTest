@@ -13,11 +13,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import ch.vorburger.exec.ManagedProcessException;
+import ch.vorburger.mariadb4j.DB;
+import ch.vorburger.mariadb4j.DBConfigurationBuilder;
 
 /**
  * 데이터베이스 설정
@@ -27,16 +28,27 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @MapperScan("com.navercorp.example.transactiontest.dao")
+@PropertySource("classpath:/database/database.properties")
 public class DatabaseConfig {
 	@Bean
-	public DataSource dataSource() {
-		EmbeddedDatabaseBuilder databaseBuilder = new EmbeddedDatabaseBuilder();
-		EmbeddedDatabase embeddedDatabase = databaseBuilder
-			.setType(EmbeddedDatabaseType.H2)
-			.addScript("classpath:/database/user.sql")
-			.addScript("classpath:/database/insert-users.sql")
-			.build();
-		return embeddedDatabase;
+	public DataSource dataSource(@Value("${test.datasource.driver-class-name}")String driverClassName,
+								@Value("${test.datasource.database-name}")String databaseName,
+								@Value("${test.datasource.username}")String username,
+								@Value("${test.datasource.password}")String password) throws ManagedProcessException {
+		DBConfigurationBuilder config = DBConfigurationBuilder.newBuilder();
+		config.setPort(0);
+		DB db = DB.newEmbeddedDB(config.build());
+		db.start();
+		db.createDB(databaseName);
+		db.source("database/user.sql", username, password, databaseName);
+		db.source("database/insert-users.sql", username, password, databaseName);
+
+		BasicDataSource dataSource = new BasicDataSource();
+		dataSource.setUrl(config.getURL(databaseName));
+		dataSource.setDriverClassName(driverClassName);
+		dataSource.setUsername(username);
+		dataSource.setPassword(password);
+		return dataSource;
 	}
 
 	@Bean
