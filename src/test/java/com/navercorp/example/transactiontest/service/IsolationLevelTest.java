@@ -27,6 +27,8 @@ public class IsolationLevelTest {
 	private static final int REPEATABLE_READ_TEST_ID = 2;
 	private static final String REPEATABLE_READ_TEST_NAME = "repeatable-read-test-user";
 	private static final String REPEATABLE_READ_TEST_EMAIL = "repeatable-read-test-user@navercorp.com";
+	private static final String PHANTOM_READ_TEST_NAME = "phantom-read-test-user";
+	private static final String PHANTOM_READ_TEST_EMAIL = "phantom-read-test-user@navercorp.com";
 
 	@Autowired
 	private IsolationLevelTestService isolationLevelTestService;
@@ -56,5 +58,13 @@ public class IsolationLevelTest {
 		LOGGER.debug("outside transaction: {}", userDao.selectUser(REPEATABLE_READ_TEST_ID));
 		// 아래 결과가 참이면 non-repeatable read 발생 안함
 		assertTrue(repeatableReadTest);
+	}
+
+	@Test
+	public void phantomReadTest() {
+		boolean phantomReadTest = isolationLevelTestService.phantomRead(PHANTOM_READ_TEST_NAME, PHANTOM_READ_TEST_EMAIL);
+
+		// 아래 결과가 참이면 phantom-read 발생
+		assertTrue(phantomReadTest);
 	}
 }
